@@ -1,0 +1,22 @@
+# Python
+*.pyc
+*~
+__pycache__/
+.ipynb_checkpoints/
+
+# Environments
+.env
+venv/
+env/
+
+# Django
+*.log
+*.sqlite3
+/media/  # User-uploaded files
+/static_collected/  # Files collected by manage.py collectstatic
+
+# IDEs and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

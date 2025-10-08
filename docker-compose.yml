@@ -11,7 +11,7 @@ services:
     environment:
       POSTGRES_DB: survey_db
       POSTGRES_USER: jisan
-      POSTGRES_PASSWORD: test@1234
+      POSTGRES_PASSWORD: testAdmin
     ports:
       - "5432:5432"
     volumes:

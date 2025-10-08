@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  # FE Service
+  # BE Service
+  # DB Service
+  db:
+    image: postgres:latest
+    container_name: survey_db
+    restart: always
+    environment:
+      POSTGRES_DB: survey_db
+      POSTGRES_USER: jisan
+      POSTGRES_PASSWORD: test@1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - survey_data:/var/lib/postgresql/data/
+
+volumes:
+  survey_data:

@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     # Third Party Apps
     "rest_framework",
     "corsheaders",
+
+    # Local Apps
+    "api",
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -85,7 +89,7 @@ WSGI_APPLICATION = "main.wsgi.application"
 DATABASES = {
     "default": dj_database_url.config(
         default=os.getenv(
-            "DATABASE_URL", "postgres://jisan:testAdmin@survey_db:5432/survey_db"
+            "DATABASE_URL", "postgres://jisan:testAdmin@localhost:5432/survey_db"
         )
     )
 }
@@ -122,6 +126,8 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
@@ -133,15 +139,27 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+AUTH_USER_MODEL = 'users.User'
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'utils.renderers.StandardizedJSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-    "AUTH_HEADER_TYPES": ("Bearer",),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(

@@ -13,12 +13,17 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import z from "zod";
 
+const defaultValues = {
+    full_name: "",
+    email: "",
+    password: "",
+    is_active: "true",
+};
+
 export default function AdminUserForm({ id }: { id?: string }) {
     const router = useRouter();
     const queryClient = useQueryClient();
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [formData, setFormData] = useState<AnyType>(null);
+    const [formData, setFormData] = useState<AnyType>(defaultValues);
 
     const { data, isLoading: isQueryLoading } = GetQuery(
         "users",
@@ -48,7 +53,12 @@ export default function AdminUserForm({ id }: { id?: string }) {
             ...(id
                 ? []
                 : [
-                      { name: "password", label: "Password", required: true },
+                      {
+                          name: "password",
+                          label: "Password",
+                          type: "password",
+                          required: true,
+                      },
                       {
                           name: "is_active",
                           label: "Active Status",
@@ -71,24 +81,12 @@ export default function AdminUserForm({ id }: { id?: string }) {
             .nonempty({ message: "Active status is required" }),
     });
 
-    const defaultValues = {
-        full_name: "",
-        email: "",
-        password: "",
-        is_active: "",
-    };
-
     useEffect(() => {
-        if (!isQueryLoading) {
-            if (id && values) {
-                setFormData({
-                    ...values,
-                    is_active: values?.is_active ? "true" : "false",
-                });
-            } else {
-                setFormData(defaultValues);
-            }
-            setIsLoading(false);
+        if (!isQueryLoading && id && values) {
+            setFormData({
+                ...values,
+                is_active: values?.is_active ? "true" : "false",
+            });
         }
     }, [id, values, isQueryLoading]);
 
@@ -98,6 +96,7 @@ export default function AdminUserForm({ id }: { id?: string }) {
         const payload = {
             full_name: values?.full_name,
             email: values?.email,
+            is_active: values?.is_active === "true",
             role: "admin",
         };
 
@@ -122,7 +121,7 @@ export default function AdminUserForm({ id }: { id?: string }) {
         router.back();
     };
 
-    if (isLoading) {
+    if (id && isQueryLoading) {
         return <LoadingSpinner />;
     }
 

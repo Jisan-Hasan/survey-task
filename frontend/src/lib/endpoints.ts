@@ -3,9 +3,8 @@
 import { endsWith } from "lodash";
 import { EndpointType } from "./types";
 
-const protocol = "http://";
-const baseUrl = "localhost:8000/api/";
-const version = "v1";
+const baseUrl =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 const endpoints: EndpointType = {
     // auth
     login: "/auth/login/",
@@ -35,5 +34,5 @@ export async function getEndpoint(key: keyof EndpointType, pathname?: string) {
 }
 
 export async function getBaseUrl() {
-    return `${protocol}${baseUrl}${version}`;
+    return `${baseUrl}`;
 }

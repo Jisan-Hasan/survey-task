@@ -65,9 +65,6 @@ class SurveySerializer(serializers.ModelSerializer):
 
         return instance
 
-
-# --- Read Serializers for Response Data ---
-
 class AnswerChoiceReadSerializer(serializers.ModelSerializer):
     # Serializes the Choice object itself for display in Multiple-Choice Answers
     choice = ChoiceSerializer(read_only=True)
@@ -78,11 +75,8 @@ class AnswerChoiceReadSerializer(serializers.ModelSerializer):
 
 
 class AnswerReadSerializer(serializers.ModelSerializer):
-    # Displays the full Question object (or just ID) - using ID here for brevity and efficiency
     question = serializers.PrimaryKeyRelatedField(read_only=True)
-    # Displays the full Choice object for Single-Choice Answers
     selected_choice = ChoiceSerializer(read_only=True)
-    # Displays the selected choices for Multiple-Choice Answers
     answer_choices = AnswerChoiceReadSerializer(many=True, read_only=True)
 
     class Meta:
@@ -92,15 +86,12 @@ class AnswerReadSerializer(serializers.ModelSerializer):
 
 class ResponseReadSerializer(serializers.ModelSerializer):
     answers = AnswerReadSerializer(many=True, read_only=True)
-    # Display the survey ID the response belongs to
     survey = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Response
         fields = ("id", "survey", "submitted_at", "answers")
 
-
-# --- Write Serializers for Submitting Response ---
 
 class AnswerCreateSerializer(serializers.Serializer):
     question = serializers.IntegerField(help_text="ID of the Question being answered.")
@@ -113,8 +104,6 @@ class AnswerCreateSerializer(serializers.Serializer):
 
 class ResponseCreateSerializer(serializers.Serializer):
     answers = AnswerCreateSerializer(many=True)
-
-    # respondent_meta = serializers.DictField(child=serializers.CharField(), required=False) # If enabled in models
 
     def validate(self, data):
         survey = self.context.get("survey")
@@ -131,8 +120,6 @@ class ResponseCreateSerializer(serializers.Serializer):
                     f"Question ID {q_id} in answer index {idx} does not belong to survey {survey.id}."
                 )
             answered_q_ids.add(q_id)
-
-            # Additional validation logic (e.g., check if text/choice fields match question type) can be added here
 
         # Check required questions
         for q in questions.values():
@@ -203,10 +190,6 @@ class ResponseCreateSerializer(serializers.Serializer):
 
             # Bulk create all Answer objects
             created_answers = Answer.objects.bulk_create(answers_to_create)
-
-            # Handle the AnswerChoice creation for MULTIPLE questions
-            # This requires matching the newly created Answer objects back to the original answers_data,
-            # which is complex. A simpler, but less efficient approach for MULTIPLE:
 
             created_answer_map = {}
             for answer in created_answers:

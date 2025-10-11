@@ -1,40 +1,40 @@
 services:
-  # FE Service
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: survey_fe
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://backend:8000/api/v1
-      - NODE_ENV=production
-    depends_on:
-      - backend
-    networks:
-      - survey-network
+  # # FE Service
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: survey_fe
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NEXT_PUBLIC_API_URL=http://backend:8000/api/v1
+  #     - NODE_ENV=production
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - survey-network
 
-  # BE Service
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: survey_be
-    restart: always
-    ports:
-      - "8000:8000"
-    environment:
-      - DATABASE_URL=postgres://jisan:testAdmin@db:5432/survey_db
-      # Superuser credentials
-      - DJANGO_SUPERUSER_USERNAME=jisan
-      - DJANGO_SUPERUSER_EMAIL=jisan@gmail.com
-      - DJANGO_SUPERUSER_PASSWORD=test1234
-    depends_on:
-      - db
-    networks:
-      - survey-network
+  # # BE Service
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: survey_be
+  #   restart: always
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - DATABASE_URL=postgres://jisan:testAdmin@db:5432/survey_db
+  #     # Superuser credentials
+  #     - DJANGO_SUPERUSER_USERNAME=jisan
+  #     - DJANGO_SUPERUSER_EMAIL=jisan@gmail.com
+  #     - DJANGO_SUPERUSER_PASSWORD=test1234
+  #   depends_on:
+  #     - db
+  #   networks:
+  #     - survey-network
 
   # DB Service
   db:

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # Local Apps
     "api",
     'users',
+    "surveys"
 ]
 
 MIDDLEWARE = [
@@ -143,6 +144,9 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        # Use SessionAuthentication for web views/browsers
+        'rest_framework.authentication.SessionAuthentication',
+
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -152,10 +156,13 @@ REST_FRAMEWORK = {
         'utils.renderers.StandardizedJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 100000,
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,

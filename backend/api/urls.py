@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from users.views import LoginView, LogoutView, TokenRefresh,UserProfileView,UserListCreateView,UserDetailView
 
@@ -10,4 +10,6 @@ urlpatterns = [
 
     path('users/', UserListCreateView.as_view(), name='user-list-create'),
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+
+    path('surveys/', include('surveys.urls'))
 ]

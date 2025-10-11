@@ -13,7 +13,8 @@ This project is a **full-stack survey application** with a **Next.js frontend** 
 5. [Running the Project](#running-the-project)
 6. [Accessing the Services](#accessing-the-services)
 7. [Testing](#testing)
-8. [Notes](#notes)
+8. [API Documentation](#api-documentation)
+9. [Notes](#notes)
 
 ---
 
@@ -106,7 +107,6 @@ docker-compose up --build
 
 > Default superuser credentials:
 >
-> -   Username: `jisan`
 > -   Email: `jisan@gmail.com`
 > -   Password: `test1234`
 
@@ -129,6 +129,15 @@ python manage.py test
 ```
 
 ---
+
+Here’s the **API Documentation section** of your README, formatted cleanly in Markdown:
+
+---
+
+## 📚 API Documentation
+
+The full API documentation is available here:
+👉 **[View API Documentation on Postman](https://documenter.getpostman.com/view/37320274/2sB3QMK8dW)**
 
 ## Notes
 
